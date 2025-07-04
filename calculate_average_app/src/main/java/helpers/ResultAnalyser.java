@@ -12,26 +12,36 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResultAnalyser {
-    private static final String RESULT_FILE = Paths.get(System.getProperty("user.dir"), "script", "averages.csv").toString();
+    private static final String[] RESULT_PATHS = {
+            Paths.get(System.getProperty("user.dir"), "averages.csv").toString(),
+            Paths.get(System.getProperty("user.dir"), "script", "averages.csv").toString()
+    };
+
+    public String getResultFile() {
+        for (String path : RESULT_PATHS) {
+            if (new File(path).exists())
+                return path;
+        }
+        return RESULT_PATHS[0];
+    }
+
     private List<String[]> records = new LinkedList<>();
 
     public void containsRecord(String user, String month, double averageAmount) {
         if (records.isEmpty()) {
             readRecords();
         }
-
         String[] userRecord = records.stream().filter(record -> record[0].equals(user))
                 .findFirst().get();
-
         assertEquals(month, userRecord[1]);
         assertEquals(averageAmount, Double.parseDouble(userRecord[2]));
     }
 
     private void readRecords() {
         try {
-            List<String> recordStrings = Files.readAllLines(Paths.get(RESULT_FILE));
-
-            for (String record : recordStrings.get(1).split("\\\\n")) {
+            List<String> recordStrings = Files.readAllLines(Paths.get(getResultFile()));
+            for (int i = 1; i < recordStrings.size(); i++) {
+                String record = recordStrings.get(i);
                 String[] parts = record.split(",");
                 records.add(parts);
             }

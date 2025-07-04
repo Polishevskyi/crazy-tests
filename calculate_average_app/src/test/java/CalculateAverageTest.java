@@ -39,76 +39,70 @@ public class CalculateAverageTest {
     public void calculatingAverageScriptFailsIfTimeoutExceeded() {
         new TestScenario()
                 .given()
-                // .generateLargeVolumeData(100_000)
+                .generateLargeVolumeData(100_000)
                 .when()
-                // .executeScriptWithTimeout()
+                .executeScriptWithTimeout()
                 .then()
-        // .executionTimeExceedsLimit()
-        // .exitCodeIs(1)
-        // .containsError("таймаут")
-        ;
+                .executionTimeExceedsLimit()
+                .exitCodeIs(1)
+                .containsError("таймаут");
     }
 
     @Test
     public void calculatingAverageNoTempFilesAfterFailure() {
         new TestScenario()
                 .given()
-                // .withInvalidData()
+                .withInvalidData()
                 .when()
-                // .executeScript()
+                .executeScript()
                 .then()
-        // .exitCodeIs(1)
-        // .noTempFilesExist()
-        // .containsError("описание сбоя")
-        ;
+                .exitCodeIs(1)
+                .noTempFilesExist()
+                .containsError("описание сбоя");
     }
 
     @Test
     public void calculatingAverageNoInjectionsInInputAndOutput() {
         new TestScenario()
                 .given()
-                // .withInjectionData()
+                .withInjectionData()
                 .when()
-                // .executeScript()
+                .executeScript()
                 .then()
-        // .noInjectionsInOutput()
-        ;
+                .noInjectionsInOutput();
     }
 
     @Test
     public void calculatingAverageNoDataLossWithLargeVolume() {
         new TestScenario()
                 .given()
-                // .generateLargeVolumeData(100_000)
+                .generateLargeVolumeData(100_000)
                 .when()
-                // .executeScript()
+                .executeScript()
                 .then()
-        // .noDataLoss()
-        // .containsErrorIfAny()
-        ;
+                .noDataLoss()
+                .containsErrorIfAny();
     }
 
     @Test
     public void calculatingAverageUnclearErrorMessageForMissingFile() {
         new TestScenario()
                 .given()
-                // .withNonExistingFile()
+                .withNonExistingFile()
                 .when()
-                // .executeScript()
+                .executeScript()
                 .then()
-        // .errorMessageIsUnclear()
-        ;
+                .errorMessageIsUnclear();
     }
 
     @Test
     public void calculatingAverageNoLogsOnError() {
         new TestScenario()
                 .given()
-                // .withInvalidData()
+                .withInvalidData()
                 .when()
-                // .executeScript()
+                .executeScript()
                 .then()
-        // .logsAreMissingOrUninformative()
-        ;
+                .logsAreMissingOrUninformative();
     }
 }
