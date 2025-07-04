@@ -52,6 +52,7 @@ carol,carol@example.com
 ```bash
 chmod +x merge_users.sh
 ./merge_users.sh users.txt users.json users.csv
+bash merge_users/script/merge_users.sh merge_users/script/data/users.txt merge_users/script/data/users.json merge_users/script/data/users.csv
 ```
 
 ---

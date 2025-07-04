@@ -13,9 +13,13 @@ fi
 declare -A EMAILS
 
 # Чтение CSV
-tail -n +2 "$CSV_FILE" | while IFS=',' read -r login email; do
+while IFS=',' read -r login email; do
+  login=$(echo "$login" | xargs)
+  if [[ -z "$login" || "$login" == "login" ]]; then
+    continue
+  fi
   EMAILS["$login"]="$email"
-done
+done < "$CSV_FILE"
 
 # Генерация заголовка
 echo "login,name,email" > full_users.csv

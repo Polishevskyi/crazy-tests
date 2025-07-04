@@ -47,6 +47,7 @@ dave,2024-12-31
 
 chmod +x check_active_users.sh
 ./check_active_users.sh users.txt logins.csv banned.json
+/opt/homebrew/bin/bash check_active_users/script/check_active_users.sh check_active_users/script/data/users.txt check_active_users/script/data/logins.csv check_active_users/script/data/banned.json
 
 ## Выходной файл: active_users.csv
 ```

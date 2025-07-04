@@ -17,9 +17,10 @@ TODAY=$(date +%s)
 
 # Словарь логин → дата_входа
 declare -A LAST_LOGINS
-tail -n +2 "$LOGINS_FILE" | while IFS=',' read -r login date; do
+while IFS=',' read -r login date; do
+  [[ "$login" == "login" ]] && continue
   LAST_LOGINS["$login"]="$date"
-done < <(tail -n +2 "$LOGINS_FILE")
+done < "$LOGINS_FILE"
 
 # Создаём файл результата
 echo "login,last_login" > active_users.csv
@@ -27,7 +28,7 @@ echo "login,last_login" > active_users.csv
 # Проверка каждого пользователя
 while read -r user; do
   # Пропускаем, если забанен
-  if printf '%s\\n' "${BANNED[@]}" | grep -qx "$user"; then
+  if printf '%s\n' "${BANNED[@]}" | grep -qx "$user"; then
     continue
   fi
 
@@ -38,7 +39,7 @@ while read -r user; do
   fi
 
   # Преобразуем дату входа в секунды
-  login_ts=$(date -d "$last_login" +%s 2>/dev/null)
+  login_ts=$(gdate -d "$last_login" +%s 2>/dev/null)
   if [[ -z "$login_ts" ]]; then
     continue
   fi

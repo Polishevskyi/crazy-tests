@@ -44,8 +44,8 @@ bob,ALL,800.0
 ## Пример запуска
 
 ```bash
-chmod +x calculate_averages.sh
-./calculate_averages.sh data/transactions_100000.csv
+chmod +x calculate_average_app/script/calculate_averages.sh
+./calculate_average_app/script/calculate_averages.sh calculate_average_app/script/data/transactions.csv
 ```
 
 ---
