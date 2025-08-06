@@ -1,22 +1,21 @@
+# Script: `check_active_users.sh`
 
-# Скрипт: `check_active_users.sh`
+## Purpose
 
-## Назначение
+The script checks which users are **active** by combining data from three sources:
 
-Скрипт проверяет, какие пользователи **активны**, объединяя данные из трёх источников:
+1. `users.txt` — list of user logins (one login per line)
+2. `logins.csv` — CSV file with last login dates (`login,last_login`)
+3. `banned.json` — JSON array with banned user logins
 
-1. `users.txt` — список логинов пользователей (один логин на строку)
-2. `logins.csv` — CSV-файл с датами последнего входа (`login,last_login`)
-3. `banned.json` — JSON-массив с логинами заблокированных пользователей
-
-Скрипт сохраняет результат в `active_users.csv`, включая пользователей:
-- из `users.txt`
-- **не** заблокированных
-- заходивших **за последние 30 дней**
+The script saves the result to `active_users.csv`, including users who are:
+- listed in `users.txt`
+- **not** banned
+- logged in within the **last 30 days**
 
 ---
 
-## Пример входных файлов
+## Example Input Files
 
 ### `users.txt`
 
@@ -42,52 +41,53 @@ dave,2024-12-31
 ["bob", "dave"]
 ```
 
-##  Пример запуска
+## Example Usage
 
-
+```bash
 chmod +x check_active_users.sh
 ./check_active_users.sh users.txt logins.csv banned.json
+```
 
-## Выходной файл: active_users.csv
+## Output File: active_users.csv
 ```
 login,last_login
 alice,2025-04-10
 carol,2025-04-25
 ```
 
-## ⚠️ Обработка ошибок
-- Если логин заблокирован или не заходил в систему более 30 дней, он исключается
-- При отсутствии данных или ошибках форматирования — скрипт сообщает об этом в консоль
-- Поддержка пустых файлов
+## ⚠️ Error Handling
+- If a login is banned or hasn't logged in for more than 30 days, it's excluded
+- For missing data or format errors — script reports to console
+- Support for empty files
 
-## Как определяется "последние 30 дней"
-Скрипт использует текущую дату и date -d/date -r для сравнения разницы в днях.
+## How "Last 30 Days" is Determined
+The script uses current date and date -d/date -r to compare day differences.
 
-## Что можно протестировать
-- Пользователи из users.txt, но забаненные — исключаются
+## What Can Be Tested
+- Users from users.txt who are banned — excluded
 
-- Старые даты последнего входа — исключаются
+- Old last login dates — excluded
 
-- Валидный и невалидный JSON
+- Valid and invalid JSON
 
-- Отсутствие логина в logins.csv
+- Missing login in logins.csv
 
-- Пустые файлы
+- Empty files
 
-## Зависимости
-Скрипт использует:
+## Dependencies
+The script uses:
 
-jq — для чтения JSON
+jq — for reading JSON
 
-bash версии 4+
+bash version 4+
 
-date — для обработки дат
+date — for date processing
 
-Убедитесь, что jq установлен:
+Make sure jq is installed:
 
-`sudo apt install jq  # для Ubuntu`
+`sudo apt install jq  # for Ubuntu`
 
-### Структура проекта
+### Project Structure
 
 ```
 repo/
@@ -96,6 +96,5 @@ repo/
 ├── logins.csv
 ├── banned.json
 ├── active_users.csv
-├── README.md  ← этот файл
+├── README.md  ← this file
 ```
-

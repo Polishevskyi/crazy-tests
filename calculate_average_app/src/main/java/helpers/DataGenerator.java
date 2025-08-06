@@ -7,8 +7,11 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class DataGenerator {
-    private static final String DIR_PATH = Paths.get(System.getProperty("user.dir"), "script", "data").toString();
-    private static final String FILE_PATH = Paths.get(System.getProperty("user.dir"), "script", "data", "transactions.csv").toString();
+    private static final String DIR_PATH = Paths
+            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "data").toString();
+    private static final String FILE_PATH = Paths
+            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "data", "transactions.csv")
+            .toString();
 
     private static final String[] USERS = {"alice", "bob", "charlie", "tom"};
     private static final String[] CATEGORIES = {"food", "transport", "beauty"};
@@ -28,11 +31,11 @@ public class DataGenerator {
     }
 
     private void writeData(String data, boolean append) {
-        try(FileWriter writer = new FileWriter(FILE_PATH, append)) {
+        try (FileWriter writer = new FileWriter(FILE_PATH, append)) {
             writer.write(data);
-            System.out.println("Data was written to file " + FILE_PATH);
+
         } catch (IOException e) {
-            System.out.println("Error while writing data to file " + e.getMessage());
+            // Handle exception silently
         }
     }
 

@@ -1,55 +1,55 @@
-# Группировка тест кейсов
+# Test Case Grouping
 
-## Проверка передачи и обработки формата данных
+## Data Format Processing and Validation
 
-Пример входных данных:
+Example input data:
 
 ```csv
 user,date,category,amount
 alice,2025-01-15,food,1200
 alice,2025-01-20,transport,500
 bob,2025-02-03,food,800
-````
+```
 
-1) Разделители ,
-   Позитивный сценарий: ,
-   Негативный сценарий: любой другой разделитель
+1) Separators ,
+   Positive scenario: ,
+   Negative scenario: any other separator
 
-2) Первая колонка - имя пользователя
-   Позитивный сценарий: имя
-   Негативный сценарий: несуществующее пользователь
+2) First column - user name
+   Positive scenario: name
+   Negative scenario: non-existing user
 
-3) Вторая колонка - дата
-   Позитивный сценарий: дата корректного формата
-   Негативный сценарий: дата некорректного формата
+3) Second column - date
+   Positive scenario: date in correct format
+   Negative scenario: date in incorrect format
 
-4) Третья колонка - категория
-   Позитивный сценарий: существующая категория
-   Негативный сценарий: несуществующую категория
+4) Third column - category
+   Positive scenario: existing category
+   Negative scenario: non-existing category
 
-5) Четвертая колонка - потраченная сумма
-   Позитивный сценарий: целочисленный, дробное число
-   Негативный сценарий: отрицательное число, не число
+5) Fourth column - spent amount
+   Positive scenario: integer, decimal number
+   Negative scenario: negative number, non-number
 
-## Проверка подсчета среднего
+## Average Calculation Testing
 
-## По тратам пользователей
-1) Юзер тратил деньги только 1 месяц
-2) Юзер тратил деньги все месяцы
-3) Юзер тратил деньги 1 раз в месяц
-4) Юзер тратил деньги много раз в месяц
-5) Юзер не потратил деньги за месяц
+## By User Spending
+1) User spent money only 1 month
+2) User spent money all months
+3) User spent money 1 time per month
+4) User spent money many times per month
+5) User didn't spend money for a month
 
-## По количеству пользователей
-1) Юзер один
-2) Юзеров несколько
+## By Number of Users
+1) Single user
+2) Multiple users
 
-## Точность вычисления
-1) Юзер тратил несколько раз дробное значения
+## Calculation Precision
+1) User spent decimal values multiple times
 
-# Проверка выходного формата
-1) Формат CSV ,
-2) Первая колонка: user
-3) Вторая колонка: месяц
-4) Третья колонка: среднее количество затрат
-5) Обработка негативных кейсов: понятное сообщение об ошибке 
+# Output Format Testing
+1) CSV format ,
+2) First column: user
+3) Second column: month
+4) Third column: average spending amount
+5) Negative case handling: clear error message

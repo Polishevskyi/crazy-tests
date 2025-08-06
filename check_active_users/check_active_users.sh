@@ -1,54 +1,64 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 USERS_FILE=$1
 LOGINS_FILE=$2
 BANNED_FILE=$3
 
 if [[ ! -f "$USERS_FILE" || ! -f "$LOGINS_FILE" || ! -f "$BANNED_FILE" ]]; then
-  echo "❌ Один из входных файлов не найден."
+  echo "❌ One of the input files not found."
   exit 1
 fi
 
-# Читаем список забаненных
-readarray -t BANNED < <(jq -r '.[]' "$BANNED_FILE")
+# Read banned users list
+BANNED_USERS=$(jq -r '.[]' "$BANNED_FILE" | tr '\n' '|')
 
-# Получаем сегодняшнюю дату в секундах
+# Get today's date in seconds
 TODAY=$(date +%s)
 
-# Словарь логин → дата_входа
-declare -A LAST_LOGINS
-tail -n +2 "$LOGINS_FILE" | while IFS=',' read -r login date; do
-  LAST_LOGINS["$login"]="$date"
-done < <(tail -n +2 "$LOGINS_FILE")
+# Create temporary file for logins
+TEMP_LOGINS=$(mktemp)
+tail -n +2 "$LOGINS_FILE" > "$TEMP_LOGINS"
 
-# Создаём файл результата
-echo "login,last_login" > active_users.csv
+# Create result file in data directory
+mkdir -p data
+echo "login,last_login" > data/active_users.csv
 
-# Проверка каждого пользователя
+# Check each user
 while read -r user; do
-  # Пропускаем, если забанен
-  if printf '%s\\n' "${BANNED[@]}" | grep -qx "$user"; then
+  [[ -z "$user" ]] && continue
+  
+  # Skip if banned
+  if [[ "$BANNED_USERS" == *"|$user|"* || "$BANNED_USERS" == "$user|"* || "$BANNED_USERS" == *"|$user" || "$BANNED_USERS" == "$user" ]]; then
     continue
   fi
 
-  last_login="${LAST_LOGINS[$user]}"
+  # Find last login date
+  last_login=$(grep "^$user," "$TEMP_LOGINS" | cut -d',' -f2 | head -1)
 
   if [[ -z "$last_login" ]]; then
     continue
   fi
 
-  # Преобразуем дату входа в секунды
-  login_ts=$(date -d "$last_login" +%s 2>/dev/null)
+  # Convert login date to seconds (use -j for macOS)
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    login_ts=$(date -j -f "%Y-%m-%d" "$last_login" "+%s" 2>/dev/null)
+  else
+    login_ts=$(date -d "$last_login" +%s 2>/dev/null)
+  fi
+  
   if [[ -z "$login_ts" ]]; then
     continue
   fi
 
-  # Разница в днях
+  # Difference in days
   days=$(( (TODAY - login_ts) / 86400 ))
 
   if [[ "$days" -le 30 ]]; then
-    echo "$user,$last_login" >> active_users.csv
+    echo "$user,$last_login" >> data/active_users.csv
   fi
 done < "$USERS_FILE"
 
-echo "✅ Готово: active_users.csv"
+# Clean up temporary file
+rm -f "$TEMP_LOGINS"
+
+echo "✅ Done: data/active_users.csv"
