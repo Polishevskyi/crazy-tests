@@ -1,22 +1,22 @@
-# Скрипт: `merge_users.sh`
+# Script: `merge_users.sh`
 
-## 📌 Назначение
+## 📌 Purpose
 
-Скрипт объединяет информацию о пользователях из трёх источников:
+The script merges user information from three sources:
 
-1. `users.txt` — список логинов пользователей (один логин на строку)
-2. `users.json` — JSON-словарь: логин → имя
-3. `users.csv` — CSV-файл: логин, email
+1. `users.txt` — list of user logins (one login per line)
+2. `users.json` — JSON dictionary: login → name
+3. `users.csv` — CSV file: login, email
 
-На выходе создается файл `full_users.csv` с объединёнными данными:
+The output creates a `full_users.csv` file with merged data:
 
 ```csv
 login,name,email
-````
+```
 
 ---
 
-## Пример входных файлов
+## Example Input Files
 
 ### `users.txt`
 
@@ -47,7 +47,7 @@ carol,carol@example.com
 
 ---
 
-## Пример запуска
+## Example Usage
 
 ```bash
 chmod +x merge_users.sh
@@ -56,7 +56,7 @@ chmod +x merge_users.sh
 
 ---
 
-## Выходной файл: `full_users.csv`
+## Output File: `full_users.csv`
 
 ```csv
 login,name,email
@@ -67,42 +67,42 @@ carol,Carol Lee,carol@example.com
 
 ---
 
-## ⚠️ Обработка ошибок
+## ⚠️ Error Handling
 
-Если логин есть в `users.txt`, но отсутствует в `users.json` или `users.csv`, пользователь пропускается, и в консоль выводится предупреждение:
+If a login exists in `users.txt` but is missing from `users.json` or `users.csv`, the user is skipped and a warning is printed to console:
 
 ```
-⚠️  Пропущен пользователь bob: нет имени или email
+⚠️  Skipped user bob: missing name or email
 ```
 
 ---
 
-## Что можно протестировать
+## What Can Be Tested
 
-* Пользователи с полными данными объединяются корректно
-* Пропуски в `users.json` или `users.csv` приводят к логированию предупреждения
-* Скрипт не падает на пустых файлах
-* Дубликаты логинов не дублируются в выходном файле
-* Итоговый CSV начинается с корректного заголовка
+* Users with complete data are merged correctly
+* Missing data in `users.json` or `users.csv` leads to warning logging
+* Script doesn't crash on empty files
+* Duplicate logins are not duplicated in output file
+* Final CSV starts with correct header
 
 ---
 
-## Зависимости
+## Dependencies
 
-Скрипт использует:
+The script uses:
 
-* `jq` — для чтения JSON
-* `bash` версии 4+ — для ассоциативных массивов
+* `jq` — for reading JSON
+* `bash` version 4+ — for associative arrays
 
-Убедитесь, что `jq` установлен:
+Make sure `jq` is installed:
 
 ```bash
-sudo apt install jq  # для Ubuntu
+sudo apt install jq  # for Ubuntu
 ```
 
 ---
 
-## Структура проекта (пример)
+## Project Structure (example)
 
 ```
 repo/
@@ -111,5 +111,5 @@ repo/
 ├── users.json
 ├── users.csv
 ├── full_users.csv
-├── README.md  ← этот файл
+├── README.md  ← this file
 ```

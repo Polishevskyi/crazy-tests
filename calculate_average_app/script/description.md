@@ -1,29 +1,29 @@
-# Скрипт: `calculate_averages.sh`
+# Script: `calculate_averages.sh`
 
-## Назначение
+## Purpose
 
-Скрипт обрабатывает CSV-файл с транзакциями пользователей и вычисляет **средние расходы в месяц**.  
-Результат сохраняется в файл `averages.csv`.
+The script processes a CSV file with user transactions and calculates **average monthly spending**.  
+The result is saved to `averages.csv` file.
 
 ---
 
-## Входной формат: `transactions.csv`
+## Input Format: `transactions.csv`
 
 ```csv
 user,date,category,amount
 alice,2025-01-15,food,1200
 alice,2025-01-20,transport,500
 bob,2025-02-03,food,800
-````
+```
 
-* `user` — логин пользователя
-* `date` — дата транзакции в формате `YYYY-MM-DD`
-* `category` — категория расходов
-* `amount` — сумма в рублях
+* `user` — user login
+* `date` — transaction date in `YYYY-MM-DD` format
+* `category` — expense category
+* `amount` — amount in currency units
 
 ---
 
-## Выходной формат: `averages.csv`
+## Output Format: `averages.csv`
 
 ```csv
 user,month,average_spending
@@ -31,17 +31,17 @@ alice,ALL,850.0
 bob,ALL,800.0
 ```
 
-## ⏱ Нефункциональные требования
+## ⏱ Non-functional Requirements
 
-| Объем данных      | Время выполнения |
-| ----------------- | ---------------- |
-| ≤ 10 000 строк    | ≤ 1 секунда      |
-| ≤ 100 000 строк   | ≤ 5 секунд       |
-| ≤ 1 000 000 строк | ≤ 20 секунд      |
+| Data Volume       | Execution Time |
+| ----------------- | -------------- |
+| ≤ 10,000 rows     | ≤ 1 second     |
+| ≤ 100,000 rows    | ≤ 5 seconds    |
+| ≤ 1,000,000 rows  | ≤ 20 seconds   |
 
 ---
 
-## Пример запуска
+## Example Usage
 
 ```bash
 chmod +x calculate_averages.sh
@@ -50,7 +50,7 @@ chmod +x calculate_averages.sh
 
 ---
 
-## Структура проекта (пример)
+## Project Structure (example)
 
 ```
 expenses-analyzer/
@@ -59,6 +59,6 @@ expenses-analyzer/
 │   ├── transactions_1k.csv
 │   ├── transactions_100k.csv
 │   └── transactions_1M.csv
-├── averages.csv                  # Результат выполнения
-├── README.md                     # Этот файл
+├── averages.csv                  # Execution result
+├── README.md                     # This file
 ```

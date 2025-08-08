@@ -1,35 +1,45 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TXT_FILE=$1
 JSON_FILE=$2
 CSV_FILE=$3
 
 if [[ ! -f $TXT_FILE || ! -f $JSON_FILE || ! -f $CSV_FILE ]]; then
-  echo "Один из входных файлов не найден"
+  echo "One of the input files not found"
   exit 1
 fi
 
-# Временный файл для email
-declare -A EMAILS
+# Create temporary file for email
+TEMP_CSV=$(mktemp)
+tail -n +2 "$CSV_FILE" > "$TEMP_CSV"
 
-# Чтение CSV
-tail -n +2 "$CSV_FILE" | while IFS=',' read -r login email; do
-  EMAILS["$login"]="$email"
-done
+# Create data directory if it doesn't exist
+mkdir -p data
 
-# Генерация заголовка
-echo "login,name,email" > full_users.csv
+# Generate header
+echo "login,name,email" > data/full_users.csv
 
-# Проход по TXT
+# Process TXT file
 while read -r login; do
-  name=$(jq -r --arg login "$login" '.[$login]' "$JSON_FILE")
-  email=${EMAILS[$login]}
-
+  [[ -z "$login" ]] && continue
+  
+  # Get name from JSON
+  name=$(jq -r --arg login "$login" '.[$login] // null' "$JSON_FILE" 2>/dev/null)
+  if [[ "$name" == "null" || -z "$name" ]]; then
+    name=""
+  fi
+  
+  # Find email in CSV
+  email=$(grep "^$login," "$TEMP_CSV" | cut -d',' -f2 | head -1)
+  
   if [[ -n "$name" && -n "$email" ]]; then
-    echo "$login,$name,$email" >> full_users.csv
+    echo "$login,$name,$email" >> data/full_users.csv
   else
-    echo "⚠️  Пропущен пользователь $login: нет имени или email"
+    echo "⚠️  Skipped user $login: missing name or email"
   fi
 done < "$TXT_FILE"
 
-echo "✅ Готово: full_users.csv"
+# Clean up temporary file
+rm -f "$TEMP_CSV"
+
+echo "✅ Done: data/full_users.csv"

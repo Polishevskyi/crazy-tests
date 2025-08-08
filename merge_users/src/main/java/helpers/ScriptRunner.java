@@ -9,11 +9,8 @@ import java.lang.management.ThreadMXBean;
 import java.nio.file.Paths;
 
 public class ScriptRunner {
-    private static final String INPUT_FILE = Paths
-            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "data", "transactions.csv")
-            .toString();
-    private static final String SCRIPT_PATH = Paths
-            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "calculate_averages.sh").toString();
+    private static final String SCRIPT_PATH = Paths.get(System.getProperty("user.dir"), "merge_users.sh").toString();
+    private static final String DATA_DIR = Paths.get(System.getProperty("user.dir"), "data").toString();
 
     private String errorMessage = "";
     private String outputMessage = "";
@@ -23,21 +20,25 @@ public class ScriptRunner {
     private long cpuTimeMs;
 
     public void executeScript() {
-        runScript(INPUT_FILE);
+        String usersFile = Paths.get(DATA_DIR, "users.txt").toString();
+        String jsonFile = Paths.get(DATA_DIR, "users.json").toString();
+        String csvFile = Paths.get(DATA_DIR, "users.csv").toString();
+
+        runScript(usersFile, jsonFile, csvFile);
     }
 
-    public void executeScript(String filePath) {
-        runScript(filePath);
+    public void executeScript(String usersFile, String jsonFile, String csvFile) {
+        runScript(usersFile, jsonFile, csvFile);
     }
 
-    private void runScript(String filePath) {
+    private void runScript(String usersFile, String jsonFile, String csvFile) {
 
 
         long startTime = System.currentTimeMillis();
         long startMemory = getUsedMemory();
         long startCpuTime = getCpuTime();
 
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", SCRIPT_PATH, filePath);
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", SCRIPT_PATH, usersFile, jsonFile, csvFile);
 
         try {
             Process process = processBuilder.start();
