@@ -36,3 +36,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### IDE ###
+.idea/
+
+### Test data and output files ###
+**/data/
+*.csv
+*.json
+!**/test_design/
+!**/src/
+
+### Maven ###
+**/target/

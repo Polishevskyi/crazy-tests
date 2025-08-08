@@ -1,52 +1,52 @@
-# Шаги тест кейса
+# Test Case Steps
 
-1) Подготовка данных в виде CSV
-- генерация данных с параметром - количество строк
-- установка конкретных данных (user, date, category, amount)
+1) Data preparation in CSV format
+- data generation with parameter - number of rows
+- setting specific data (user, date, category, amount)
 
-2) Запуск скрипта с переданным путем к файлу с транзакциями
-- успешный запуск скрипта (exit code 0)
-- неуспешный запуск скрипта (exit code 1)
-- установка параметра запуска (filePath)
+2) Script execution with passed path to transaction file
+- successful script execution (exit code 0)
+- unsuccessful script execution (exit code 1)
+- setting execution parameter (filePath)
 
-3) Проверка результата в файле averages.csv
-- проверка содержимого файла averages.csv (построчно)
-- проверка сообщений ошибок
+3) Result verification in averages.csv file
+- checking averages.csv file content (line by line)
+- checking error messages
 
 
 BDD - behaviour driven development
-given (дано) - when (действие/шаги) - then (проверка результата)
+given (given) - when (action/steps) - then (result verification)
 
-### Тест кейс "2 разных юзера"
+### Test Case "2 different users"
 given
-- установка конкретных данных (user1, date, category, amount1)
-- установка конкретных данных (user2, date, category, amount2)
+- setting specific data (user1, date, category, amount1)
+- setting specific data (user2, date, category, amount2)
 
 when
-- успешный запуск скрипта (exit code 0)
+- successful script execution (exit code 0)
 
 then
-- проверка содержимого файла averages.csv (user1, date, category, amount1)
-- проверка содержимого файла averages.csv (user2, date, category, amount2)
+- checking averages.csv file content (user1, date, category, amount1)
+- checking averages.csv file content (user2, date, category, amount2)
 
-### Тест кейс "Невалидная дата"
+### Test Case "Invalid date"
 given
-- установка конкретных данных (user1, invalid-date, category, amount1)
+- setting specific data (user1, invalid-date, category, amount1)
 
 when
-- неуспешный запуск скрипта (exit code 1)
+- unsuccessful script execution (exit code 1)
 
 then
-- проверка сообщений ошибок (Обнаружена неверная дата)
+- checking error messages (Invalid date detected)
 
-### Тест кейс "Несуществующий файл"
+### Test Case "Non-existing file"
 given
-- генерация данных с параметром - количество строк (1)
+- data generation with parameter - number of rows (1)
 
 when
-- установка параметра запуска (filePath - несуществующий путь)
+- setting execution parameter (filePath - non-existing path)
 
 then
-- проверка сообщений ошибок (файл не найден)
+- checking error messages (file not found)
 
-TDD - test driven development 
+TDD - test driven development

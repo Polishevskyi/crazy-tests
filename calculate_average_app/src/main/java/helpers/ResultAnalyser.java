@@ -1,8 +1,5 @@
 package helpers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,7 +9,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResultAnalyser {
-    private static final String RESULT_FILE = Paths.get(System.getProperty("user.dir"), "script", "averages.csv").toString();
+    private static final String RESULT_FILE = Paths
+            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "averages.csv").toString();
     private List<String[]> records = new LinkedList<>();
 
     public void containsRecord(String user, String month, double averageAmount) {

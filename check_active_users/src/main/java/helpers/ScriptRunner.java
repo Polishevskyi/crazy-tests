@@ -9,11 +9,9 @@ import java.lang.management.ThreadMXBean;
 import java.nio.file.Paths;
 
 public class ScriptRunner {
-    private static final String INPUT_FILE = Paths
-            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "data", "transactions.csv")
+    private static final String SCRIPT_PATH = Paths.get(System.getProperty("user.dir"), "check_active_users.sh")
             .toString();
-    private static final String SCRIPT_PATH = Paths
-            .get(System.getProperty("user.dir"), "calculate_average_app", "script", "calculate_averages.sh").toString();
+    private static final String DATA_DIR = Paths.get(System.getProperty("user.dir"), "data").toString();
 
     private String errorMessage = "";
     private String outputMessage = "";
@@ -23,21 +21,25 @@ public class ScriptRunner {
     private long cpuTimeMs;
 
     public void executeScript() {
-        runScript(INPUT_FILE);
+        String usersFile = Paths.get(DATA_DIR, "users.txt").toString();
+        String loginsFile = Paths.get(DATA_DIR, "logins.csv").toString();
+        String bannedFile = Paths.get(DATA_DIR, "banned.json").toString();
+
+        runScript(usersFile, loginsFile, bannedFile);
     }
 
-    public void executeScript(String filePath) {
-        runScript(filePath);
+    public void executeScript(String usersFile, String loginsFile, String bannedFile) {
+        runScript(usersFile, loginsFile, bannedFile);
     }
 
-    private void runScript(String filePath) {
+    private void runScript(String usersFile, String loginsFile, String bannedFile) {
 
 
         long startTime = System.currentTimeMillis();
         long startMemory = getUsedMemory();
         long startCpuTime = getCpuTime();
 
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", SCRIPT_PATH, filePath);
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", SCRIPT_PATH, usersFile, loginsFile, bannedFile);
 
         try {
             Process process = processBuilder.start();
@@ -63,7 +65,7 @@ public class ScriptRunner {
             errorMessage = errorBuilder.toString();
 
             // If no stderr but stdout contains error, use stdout
-            if (errorMessage.trim().isEmpty() && (outputMessage.contains("❌") || outputMessage.contains("not found"))) {
+            if (errorMessage.trim().isEmpty() && outputMessage.contains("❌")) {
                 errorMessage = outputMessage;
             }
 

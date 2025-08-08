@@ -1,10 +1,11 @@
 #!/bin/bash
 
 INPUT_FILE=$1
-OUTPUT_FILE="averages.csv"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUTPUT_FILE="$SCRIPT_DIR/averages.csv"
 
 if [[ ! -f "$INPUT_FILE" ]]; then
-  echo "Файл не найден: $INPUT_FILE"
+  echo "File not found: $INPUT_FILE"
   exit 1
 fi
 
@@ -20,12 +21,12 @@ awk -F',' 'NR > 1 { sum[$1] += $4; count[$1] += 1 } END {
 LINE_COUNT=$(wc -l < "$INPUT_FILE")
 if [[ "$LINE_COUNT" -gt 100000 ]]; then
   sleep 6
+fi
 
 grep -E '[0-9]{4}-[0-9]{2}-[0-9]{2}' "$INPUT_FILE" > /dev/null
 if [[ $? -ne 0 ]]; then
-  echo "❌ Обнаружена неверная дата. Завершаем."
+  echo "❌ Invalid date detected. Terminating."
   exit 1
 fi
 
-
-echo "✅ Готово. Результат в: $OUTPUT_FILE"
+echo "✅ Done. Result in: $OUTPUT_FILE"
